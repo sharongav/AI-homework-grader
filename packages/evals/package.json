@@ -1,0 +1,22 @@
+{
+  "name": "@homework-platform/evals",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "run": "tsx src/runner.ts",
+    "prompts": "tsx src/runner.ts --suite prompts",
+    "redteam": "tsx src/runner.ts --suite redteam",
+    "rag": "tsx src/runner.ts --suite rag",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@homework-platform/types": "workspace:*",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}

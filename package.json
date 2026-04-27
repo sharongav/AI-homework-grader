@@ -1,0 +1,47 @@
+{
+  "name": "homework-platform",
+  "private": true,
+  "packageManager": "pnpm@9.15.4",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "test": "turbo test",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,css}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,css}\"",
+    "db:migrate": "pnpm --filter @homework-platform/db db:migrate",
+    "db:migrate:dev": "pnpm --filter @homework-platform/db db:migrate:dev",
+    "db:seed": "pnpm --filter @homework-platform/db db:seed",
+    "db:studio": "pnpm --filter @homework-platform/db db:studio",
+    "db:generate": "pnpm --filter @homework-platform/db db:generate",
+    "worker:dev": "pnpm --filter @homework-platform/worker dev",
+    "sandbox:dev": "pnpm --filter @homework-platform/sandbox dev",
+    "evals:run": "pnpm --filter @homework-platform/evals run",
+    "evals:prompts": "pnpm --filter @homework-platform/evals prompts",
+    "evals:redteam": "pnpm --filter @homework-platform/evals redteam",
+    "evals:rag": "pnpm --filter @homework-platform/evals rag",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.6.1",
+    "@commitlint/config-conventional": "^19.6.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.3",
+    "prettier": "^3.4.2",
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.3"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,css}": [
+      "prettier --write"
+    ]
+  }
+}

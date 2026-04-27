@@ -1,0 +1,899 @@
+// ─────────────────────────────────────────────────────────────
+// AI Homework Grader Platform — Prisma Schema
+// Full data model per §6 of the build plan
+// ─────────────────────────────────────────────────────────────
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [vector, pg_trgm]
+}
+
+// ─── Enums ───────────────────────────────────────────────────
+
+enum DataRegion {
+  US
+  EU
+  OTHER
+}
+
+enum SystemRole {
+  STUDENT
+  UNIV_ADMIN
+  SUPER_ADMIN
+}
+
+enum CourseRoleEnum {
+  GRADER
+  TA
+  PROFESSOR
+  HEAD_OF_COURSE
+  SCHOOL_MANAGER
+}
+
+enum ScopeType {
+  COURSE
+  SCHOOL
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  DROPPED
+  COMPLETED
+  WITHDRAWN
+}
+
+enum MaterialKind {
+  PDF
+  DOCX
+  PPTX
+  MARKDOWN
+  TEXT
+  VIDEO
+  IMAGE
+}
+
+enum ChunkLevel {
+  CHILD
+  PARENT
+}
+
+enum ChunkType {
+  PROSE
+  EQUATION
+  CODE
+  TABLE
+  FIGURE_CAPTION
+  LIST
+}
+
+enum AssignmentTypeEnum {
+  OBJECTIVE
+  OPEN_RESPONSE
+  MATH
+  CODE
+  MIXED
+}
+
+enum PrerequisiteRefType {
+  MATERIAL
+  MATERIAL_CHUNK
+  CONCEPT
+}
+
+enum SubmissionStatus {
+  PENDING
+  GRADING
+  DRAFT_READY
+  HELD_FOR_APPROVAL
+  FLAGGED_FOR_REVIEW
+  RELEASED
+  FAILED
+  NEEDS_MANUAL_GRADE
+}
+
+enum ReleasePolicyEnum {
+  AUTO
+  HOLD_FOR_APPROVAL
+}
+
+enum AnnotationKind {
+  STRENGTH
+  DEDUCTION
+  OBSERVATION
+}
+
+enum ModelCallPurpose {
+  GRADING
+  VERIFICATION
+  CONCEPT_EXTRACTION
+  EMBEDDING
+  TRANSCRIPTION
+  RERANK
+  HYDE_EXPANSION
+  QUERY_REWRITE
+  RUBRIC_SUGGESTION
+  FOLLOWUP_CHAT
+  CONTEXTUAL_COMPRESSION
+  OTHER
+}
+
+enum ModelCallStatusEnum {
+  OK
+  MALFORMED_OUTPUT
+  RATE_LIMITED
+  UPSTREAM_ERROR
+  TIMED_OUT
+}
+
+enum UsageKind {
+  LLM_GRADING
+  LLM_FOLLOWUP_CHAT
+  LLM_RUBRIC_SUGGESTION
+  LLM_VERIFICATION
+  LLM_EMBEDDING
+  LLM_RERANK
+  LLM_HYDE
+  LLM_QUERY_REWRITE
+  LLM_CONTEXTUAL_COMPRESSION
+  LLM_CONCEPT_EXTRACTION
+  TRANSCRIPTION
+  STORAGE_GB_MONTH
+  STORAGE_BACKUP_GB_MONTH
+}
+
+enum SuggestionStatus {
+  PENDING
+  PARTIALLY_ACCEPTED
+  ACCEPTED
+  DISCARDED
+}
+
+enum AppealStatusEnum {
+  OPEN
+  UNDER_REVIEW
+  RESOLVED
+  REJECTED
+}
+
+enum FollowupThreadStatus {
+  ACTIVE
+  FLAGGED_TO_INSTRUCTOR
+  CLOSED
+}
+
+enum FollowupMessageRole {
+  STUDENT
+  AI
+  INSTRUCTOR
+}
+
+// ─── Platform Config (Singleton) ─────────────────────────────
+
+model PlatformConfig {
+  id                         String   @id @default("platform")
+  superAdminUserId           String   @unique
+  gradingModelFamily         String   @default("gpt-5.4")
+  gradingModelSnapshot       String   @default("gpt-5.4-2026-03-15")
+  followUpChatModelFamily    String   @default("gpt-5.4")
+  followUpChatModelSnapshot  String   @default("gpt-5.4-2026-03-15")
+  auxiliaryModelFamily       String   @default("gpt-4o-mini")
+  auxiliaryModelSnapshot     String   @default("gpt-4o-mini-2024-07-18")
+  embedderModel              String   @default("voyage-3")
+  rerankerModel              String   @default("rerank-v3.5")
+  featureFlagsJson           Json     @default("{}")
+  promptRouteJson            Json     @default("{}")
+  updatedAt                  DateTime @updatedAt
+  updatedById                String?
+
+  superAdminUser User @relation("PlatformSuperAdmin", fields: [superAdminUserId], references: [id])
+  updatedByUser  User? @relation("PlatformUpdatedBy", fields: [updatedById], references: [id])
+}
+
+// ─── University ──────────────────────────────────────────────
+
+model University {
+  id                String     @id @default(cuid())
+  name              String
+  domain            String     @unique
+  ssoConfigJson     Json?
+  dataRegion        DataRegion @default(US)
+  defaultTimezone   String     @default("America/New_York")
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+
+  systemPolicy      SystemPolicy?
+  retentionPolicy   RetentionPolicy?
+  schools           School[]
+  users             User[]
+
+  @@index([domain])
+}
+
+model SystemPolicy {
+  id                                      String   @id @default(cuid())
+  universityId                            String   @unique
+  maxResubmissionsPerAssignment           Int      @default(5)
+  maxFileSizeMb                           Int      @default(50)
+  maxMonthlySpendPerCourseUsd             Decimal  @default(500) @db.Decimal(10, 2)
+  allowedModels                           String[] @default([])
+  defaultLocale                           String   @default("en")
+  defaultAutoReleaseConfidenceThreshold   Float    @default(0.9)
+  createdAt                               DateTime @default(now())
+  updatedAt                               DateTime @updatedAt
+
+  university University @relation(fields: [universityId], references: [id], onDelete: Cascade)
+}
+
+// ─── Retention Policy ────────────────────────────────────────
+
+model RetentionPolicy {
+  id                              String   @id @default(cuid())
+  universityId                    String   @unique
+  submissionRetentionYears        Int      @default(7)
+  feedbackRetentionYears          Int      @default(7)
+  followupChatRetentionYears      Int      @default(2)
+  modelCallLogRetentionMonths     Int      @default(24)
+  auditLogRetentionYears          Int      @default(7)
+  rawSubmissionFileRetentionYears Int      @default(2)
+  createdAt                       DateTime @default(now())
+  updatedAt                       DateTime @updatedAt
+
+  university University @relation(fields: [universityId], references: [id], onDelete: Cascade)
+}
+
+// ─── School ──────────────────────────────────────────────────
+
+model School {
+  id           String   @id @default(cuid())
+  universityId String
+  name         String
+  code         String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  university University @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  courses    Course[]
+
+  @@unique([universityId, code])
+  @@index([universityId])
+}
+
+// ─── User ────────────────────────────────────────────────────
+
+model User {
+  id            String      @id @default(cuid())
+  universityId  String?
+  email         String      @unique
+  passwordHash  String
+  totpSecret    String?
+  twoFaEnabled  Boolean     @default(false)
+  name          String
+  locale        String      @default("en")
+  timezone      String?
+  systemRole    SystemRole  @default(STUDENT)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  university       University?      @relation(fields: [universityId], references: [id])
+  roleAssignments  RoleAssignment[]
+  enrollments      Enrollment[]
+  submissions      Submission[]
+  gradesApproved   Grade[]          @relation("GradeApprovedBy")
+  gradesCreated    Grade[]          @relation("GradeCreatedBy")
+  comments         Comment[]
+  appeals          Appeal[]         @relation("AppealStudent")
+  appealsAssigned  Appeal[]         @relation("AppealAssigned")
+  notifications    Notification[]
+  auditLogs        AuditLog[]
+  annotationsCreated Annotation[]
+  followupThreads    FeedbackFollowupThread[]
+  rubricSuggestionsActioned RubricSuggestion[] @relation("RubricSuggestionActioned")
+  conceptSuggestionsActioned ConceptSuggestion[] @relation("ConceptSuggestionActioned")
+  platformConfigSuperAdmin PlatformConfig? @relation("PlatformSuperAdmin")
+  platformConfigUpdatedBy  PlatformConfig[] @relation("PlatformUpdatedBy")
+
+  @@index([universityId])
+  @@index([email])
+  // Partial unique index enforced via raw SQL migration:
+  // CREATE UNIQUE INDEX one_super_admin ON "User" (systemRole) WHERE "systemRole" = 'SUPER_ADMIN';
+}
+
+// ─── Role Assignment ─────────────────────────────────────────
+
+model RoleAssignment {
+  id        String        @id @default(cuid())
+  userId    String
+  role      CourseRoleEnum
+  scopeType ScopeType
+  scopeId   String
+  createdAt DateTime      @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, role, scopeType, scopeId])
+  @@index([scopeType, scopeId])
+  @@index([userId])
+}
+
+// ─── Course ──────────────────────────────────────────────────
+
+model Course {
+  id                  String           @id @default(cuid())
+  schoolId            String
+  code                String
+  title               String
+  term                String
+  headOfCourseId      String?
+  releaseDefault      ReleasePolicyEnum @default(HOLD_FOR_APPROVAL)
+  resubmissionDefault Int              @default(1)
+  monthlyBudgetUsd    Decimal?         @db.Decimal(10, 2)
+  timezone            String?
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+
+  school        School          @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  assignments   Assignment[]
+  materials     CourseMaterial[]
+  rubrics       Rubric[]
+  enrollments   Enrollment[]
+  concepts      Concept[]
+  courseBilling CourseBilling[]
+  usageRecords  UsageRecord[]
+  modelCallLogs ModelCallLog[]
+
+  @@unique([schoolId, code, term])
+  @@index([schoolId])
+}
+
+// ─── Enrollment ──────────────────────────────────────────────
+
+model Enrollment {
+  id          String           @id @default(cuid())
+  courseId    String
+  studentId   String
+  status      EnrollmentStatus @default(ACTIVE)
+  droppedAt   DateTime?
+  completedAt DateTime?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  course  Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  student User   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([courseId, studentId])
+  @@index([courseId])
+  @@index([studentId])
+}
+
+// ─── Course Material ─────────────────────────────────────────
+
+model CourseMaterial {
+  id              String       @id @default(cuid())
+  courseId         String
+  title            String
+  kind             MaterialKind
+  storageKey       String
+  weekTag          Int?
+  topicTags        String[]     @default([])
+  textExtractJson  Json?
+  sectionTreeJson  Json?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  course Course          @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  chunks MaterialChunk[]
+  assignmentPrerequisites AssignmentPrerequisite[]
+
+  @@index([courseId])
+  @@index([courseId, weekTag])
+}
+
+// ─── Material Chunk ──────────────────────────────────────────
+
+model MaterialChunk {
+  id                  String    @id @default(cuid())
+  materialId          String
+  chunkIndex          Int
+  text                String
+  weekTag             Int?
+  embedding           Unsupported("vector(1024)")?
+  chunkLevel          ChunkLevel
+  parentChunkId       String?
+  sectionHeadingPath  String    @default("")
+  pageNumber          Int?
+  startChar           Int?
+  endChar             Int?
+  chunkType           ChunkType @default(PROSE)
+  conceptIds          String[]  @default([])
+  retrievalConfigId   String?
+  createdAt           DateTime  @default(now())
+
+  material      CourseMaterial @relation(fields: [materialId], references: [id], onDelete: Cascade)
+  parentChunk   MaterialChunk? @relation("ChunkParent", fields: [parentChunkId], references: [id])
+  childChunks   MaterialChunk[] @relation("ChunkParent")
+  retrievalConfig RetrievalConfig? @relation(fields: [retrievalConfigId], references: [id])
+
+  @@index([materialId, weekTag, chunkType])
+  @@index([materialId, chunkIndex])
+  @@index([parentChunkId])
+  // HNSW index on embedding created via raw SQL migration
+  // GIN index on textTsv created via raw SQL migration
+}
+
+// ─── Assignment ──────────────────────────────────────────────
+
+model Assignment {
+  id                              String           @id @default(cuid())
+  courseId                         String
+  title                            String
+  instructions                     String
+  dueAt                            DateTime
+  allowedFileTypes                 String[]         @default(["pdf", "docx", "txt", "md", "py", "js", "java", "cpp", "ipynb", "zip", "png", "jpg", "jpeg", "heic"])
+  rubricId                         String?
+  availableFromWeek                Int?
+  expectedConceptIds               String[]         @default([])
+  latePolicyJson                   Json             @default("{}")
+  aiConfigJson                     Json             @default("{\"strictness\":\"standard\",\"gradeStyle\":false}")
+  referenceSolutionKey             String?
+  assignmentType                   AssignmentTypeEnum @default(MIXED)
+  autoReleaseEnabled               Boolean          @default(false)
+  autoReleaseConfidenceThreshold   Float            @default(0.9)
+  maxResubmissions                 Int              @default(1)
+  publishedAt                      DateTime?
+  createdAt                        DateTime         @default(now())
+  updatedAt                        DateTime         @updatedAt
+
+  course        Course                   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  rubric        Rubric?                  @relation(fields: [rubricId], references: [id])
+  submissions   Submission[]
+  prerequisites AssignmentPrerequisite[]
+  usageRecords  UsageRecord[]
+
+  @@index([courseId])
+  @@index([courseId, dueAt])
+}
+
+// ─── Assignment Prerequisite ─────────────────────────────────
+
+model AssignmentPrerequisite {
+  id           String             @id @default(cuid())
+  assignmentId String
+  refType      PrerequisiteRefType
+  refId        String
+  note         String?
+  createdAt    DateTime           @default(now())
+
+  assignment Assignment     @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  material   CourseMaterial? @relation(fields: [refId], references: [id])
+
+  @@index([assignmentId])
+  @@index([refType, refId])
+}
+
+// ─── Rubric ──────────────────────────────────────────────────
+
+model Rubric {
+  id              String   @id @default(cuid())
+  courseId         String
+  title            String
+  reusable         Boolean  @default(false)
+  latestVersionId  String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  course      Course          @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  versions    RubricVersion[]
+  assignments Assignment[]
+
+  @@index([courseId])
+}
+
+model RubricVersion {
+  id            String   @id @default(cuid())
+  rubricId      String
+  versionNumber Int
+  criteria      Json
+  createdById   String
+  isImmutable   Boolean  @default(false)
+  createdAt     DateTime @default(now())
+
+  rubric Rubric  @relation(fields: [rubricId], references: [id], onDelete: Cascade)
+  grades Grade[]
+
+  @@unique([rubricId, versionNumber])
+  @@index([rubricId])
+}
+
+// ─── Rubric Suggestion ───────────────────────────────────────
+
+model RubricSuggestion {
+  id                  String           @id @default(cuid())
+  courseId             String
+  assignmentId         String
+  suggestedCriteria    Json
+  rationaleJson        Json?
+  modelCallLogId       String?
+  status               SuggestionStatus @default(PENDING)
+  actionedById         String?
+  actionedAt           DateTime?
+  createdAt            DateTime         @default(now())
+
+  actionedByUser User? @relation("RubricSuggestionActioned", fields: [actionedById], references: [id])
+
+  @@index([assignmentId])
+}
+
+// ─── Concept ─────────────────────────────────────────────────
+
+model Concept {
+  id               String   @id @default(cuid())
+  courseId          String
+  name              String
+  parentId          String?
+  introducedInWeek  Int?
+  createdAt         DateTime @default(now())
+
+  course  Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  parent  Concept?  @relation("ConceptParent", fields: [parentId], references: [id])
+  children Concept[] @relation("ConceptParent")
+
+  @@unique([courseId, name])
+  @@index([courseId])
+}
+
+// ─── Concept Suggestion ──────────────────────────────────────
+
+model ConceptSuggestion {
+  id                 String           @id @default(cuid())
+  courseId            String
+  materialId          String
+  suggestedConcepts   Json
+  rationaleJson       Json?
+  modelCallLogId      String?
+  status              SuggestionStatus @default(PENDING)
+  actionedById        String?
+  actionedAt          DateTime?
+  createdAt           DateTime         @default(now())
+
+  actionedByUser User? @relation("ConceptSuggestionActioned", fields: [actionedById], references: [id])
+
+  @@index([materialId])
+}
+
+// ─── Submission ──────────────────────────────────────────────
+
+model Submission {
+  id              String           @id @default(cuid())
+  assignmentId    String
+  studentId       String
+  storageKeys     String[]         @default([])
+  submittedAt     DateTime         @default(now())
+  attemptNumber   Int              @default(1)
+  idempotencyKey  String           @unique
+  status          SubmissionStatus @default(PENDING)
+  statusReason    String?
+  flagReasons     Json?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  assignment         Assignment              @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  student            User                    @relation(fields: [studentId], references: [id])
+  grades             Grade[]
+  feedback           Feedback?
+  annotations        Annotation[]
+  comments           Comment[]
+  appeals            Appeal[]
+  followupThreads    FeedbackFollowupThread[]
+  retrievalSnapshots RetrievalSnapshot[]
+  modelCallLogs      ModelCallLog[]
+  usageRecords       UsageRecord[]
+
+  @@index([assignmentId])
+  @@index([studentId])
+  @@index([assignmentId, studentId, attemptNumber])
+  @@index([status])
+}
+
+// ─── Grade ───────────────────────────────────────────────────
+
+model Grade {
+  id                     String    @id @default(cuid())
+  submissionId           String
+  score                  Decimal   @db.Decimal(10, 2)
+  maxScore               Decimal   @db.Decimal(10, 2)
+  rubricBreakdown        Json
+  aiConfidence           Float
+  perCriterionConfidence Json
+  isDraft                Boolean   @default(true)
+  approvedById           String?
+  approvedAt             DateTime?
+  releasedToStudentAt    DateTime?
+  rubricVersionId        String?
+  promptVersion          String?
+  modelSnapshot          String?
+  retrievalConfigId      String?
+  retrievalSnapshotId    String?
+  supersedesGradeId      String?   @unique
+  overrideReason         String?
+  createdById            String
+  createdAt              DateTime  @default(now())
+
+  submission        Submission         @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  approvedBy        User?              @relation("GradeApprovedBy", fields: [approvedById], references: [id])
+  createdBy         User               @relation("GradeCreatedBy", fields: [createdById], references: [id])
+  rubricVersion     RubricVersion?     @relation(fields: [rubricVersionId], references: [id])
+  retrievalConfig   RetrievalConfig?   @relation(fields: [retrievalConfigId], references: [id])
+  retrievalSnapshot RetrievalSnapshot? @relation(fields: [retrievalSnapshotId], references: [id])
+  supersededGrade   Grade?             @relation("GradeSupersedes", fields: [supersedesGradeId], references: [id])
+  supersededBy      Grade?             @relation("GradeSupersedes")
+
+  @@index([submissionId])
+  @@index([submissionId, isDraft])
+}
+
+// ─── Feedback ────────────────────────────────────────────────
+
+model Feedback {
+  id                       String @id @default(cuid())
+  submissionId             String @unique
+  strengths                Json
+  weaknesses               Json
+  conceptAnalysis          Json
+  practiceRecommendations  Json
+  citations                Json
+  rawModelOutput           Json
+  createdAt                DateTime @default(now())
+
+  submission Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+}
+
+// ─── Annotation ──────────────────────────────────────────────
+
+model Annotation {
+  id            String         @id @default(cuid())
+  submissionId  String
+  pageOrLine    Int?
+  anchorJson    Json
+  body          String
+  kind          AnnotationKind
+  criterionId   String?
+  citedChunkIds String[]       @default([])
+  createdById   String
+  createdAt     DateTime       @default(now())
+
+  submission Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  createdBy  User       @relation(fields: [createdById], references: [id])
+
+  @@index([submissionId])
+}
+
+// ─── Comment ─────────────────────────────────────────────────
+
+model Comment {
+  id           String   @id @default(cuid())
+  submissionId String
+  authorId     String
+  body         String
+  createdAt    DateTime @default(now())
+
+  submission Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  author     User       @relation(fields: [authorId], references: [id])
+
+  @@index([submissionId])
+}
+
+// ─── Feedback Followup Thread ────────────────────────────────
+
+model FeedbackFollowupThread {
+  id           String               @id @default(cuid())
+  submissionId String
+  studentId    String
+  status       FollowupThreadStatus @default(ACTIVE)
+  openedAt     DateTime             @default(now())
+
+  submission Submission                @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  student    User                      @relation(fields: [studentId], references: [id])
+  messages   FeedbackFollowupMessage[]
+
+  @@index([submissionId])
+  @@index([studentId])
+}
+
+model FeedbackFollowupMessage {
+  id              String             @id @default(cuid())
+  threadId        String
+  role            FollowupMessageRole
+  body            String
+  citedChunkIds   String[]           @default([])
+  modelCallLogId  String?
+  createdAt       DateTime           @default(now())
+
+  thread FeedbackFollowupThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+
+  @@index([threadId, createdAt])
+}
+
+// ─── Appeal ──────────────────────────────────────────────────
+
+model Appeal {
+  id              String          @id @default(cuid())
+  submissionId    String
+  studentId       String
+  reason          String
+  status          AppealStatusEnum @default(OPEN)
+  assignedToId    String?
+  resolutionNote  String?
+  createdAt       DateTime        @default(now())
+  resolvedAt      DateTime?
+
+  submission Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  student    User       @relation("AppealStudent", fields: [studentId], references: [id])
+  assignedTo User?      @relation("AppealAssigned", fields: [assignedToId], references: [id])
+
+  @@index([submissionId])
+  @@index([studentId])
+}
+
+// ─── Retrieval Snapshot ──────────────────────────────────────
+
+model RetrievalSnapshot {
+  id                  String   @id @default(cuid())
+  submissionId        String
+  retrievedAt         DateTime @default(now())
+  materialChunkIds    String[] @default([])
+  denseScores         Json     @default("{}")
+  sparseScores        Json     @default("{}")
+  fusedScores         Json     @default("{}")
+  rerankScores        Json     @default("{}")
+  hydeAnswerIds       String[] @default([])
+  retrievalConfigId   String?
+  createdAt           DateTime @default(now())
+
+  submission      Submission       @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  retrievalConfig RetrievalConfig? @relation(fields: [retrievalConfigId], references: [id])
+  grades          Grade[]
+
+  @@index([submissionId])
+}
+
+// ─── Retrieval Config ────────────────────────────────────────
+
+model RetrievalConfig {
+  id                   String   @id @default(cuid())
+  embedderModel        String
+  embedderVersion      String
+  rerankerModel        String
+  rerankerVersion      String
+  rrfKWeight           Int      @default(60)
+  chunkStrategyVersion String
+  createdAt            DateTime @default(now())
+
+  materialChunks      MaterialChunk[]
+  retrievalSnapshots  RetrievalSnapshot[]
+  grades              Grade[]
+}
+
+// ─── Prompt Version ──────────────────────────────────────────
+
+model PromptVersion {
+  id           String    @id @default(cuid())
+  name         String
+  templateBody String
+  schemaBody   String
+  promptHash   String    @unique
+  createdById  String?
+  retiredAt    DateTime?
+  createdAt    DateTime  @default(now())
+
+  @@index([name])
+}
+
+// ─── Model Call Log ──────────────────────────────────────────
+
+model ModelCallLog {
+  id             String              @id @default(cuid())
+  submissionId   String?
+  courseId        String?
+  purpose        ModelCallPurpose
+  provider       String
+  model          String
+  promptVersion  String?
+  inputTokens    Int                 @default(0)
+  outputTokens   Int                 @default(0)
+  latencyMs      Int                 @default(0)
+  costUsd        Decimal             @default(0) @db.Decimal(10, 4)
+  status         ModelCallStatusEnum @default(OK)
+  errorMessage   String?
+  calledAt       DateTime            @default(now())
+
+  submission Submission? @relation(fields: [submissionId], references: [id])
+  course     Course?     @relation(fields: [courseId], references: [id])
+
+  @@index([submissionId])
+  @@index([courseId])
+  @@index([calledAt])
+  @@index([purpose])
+}
+
+// ─── Usage Record ────────────────────────────────────────────
+
+model UsageRecord {
+  id              String    @id @default(cuid())
+  courseId         String
+  assignmentId     String?
+  submissionId     String?
+  kind             UsageKind
+  provider         String
+  model            String?
+  inputTokens      Int?
+  outputTokens     Int?
+  bytes            BigInt?
+  costUsd          Decimal   @default(0) @db.Decimal(10, 4)
+  occurredAt       DateTime  @default(now())
+  modelCallLogId   String?
+
+  course     Course      @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  assignment Assignment? @relation(fields: [assignmentId], references: [id])
+  submission Submission? @relation(fields: [submissionId], references: [id])
+
+  @@index([courseId, occurredAt])
+  @@index([courseId, kind])
+}
+
+// ─── Course Billing ──────────────────────────────────────────
+
+model CourseBilling {
+  id            String  @id @default(cuid())
+  courseId       String
+  periodMonth    String
+  totalCostUsd   Decimal @db.Decimal(10, 2)
+  breakdownJson  Json    @default("{}")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([courseId, periodMonth])
+  @@index([courseId])
+}
+
+// ─── Audit Log ───────────────────────────────────────────────
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String
+  action     String
+  targetType String
+  targetId   String
+  metadata   Json     @default("{}")
+  createdAt  DateTime @default(now())
+
+  actor User @relation(fields: [actorId], references: [id])
+
+  @@index([actorId])
+  @@index([targetType, targetId])
+  @@index([createdAt])
+  @@index([action])
+}
+
+// ─── Notification ────────────────────────────────────────────
+
+model Notification {
+  id       String    @id @default(cuid())
+  userId   String
+  kind     String
+  payload  Json      @default("{}")
+  readAt   DateTime?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, readAt])
+  @@index([userId, createdAt])
+}
