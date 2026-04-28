@@ -22,7 +22,7 @@ export const courseRouter = createTRPCRouter({
         where: { userId: ctx.userId!, scopeType: 'COURSE' },
         select: { scopeId: true },
       });
-      const courseIds = roleAssignments.map((ra) => ra.scopeId);
+      const courseIds = roleAssignments.map((ra: { scopeId: string }) => ra.scopeId);
       return prisma.course.findMany({
         where: { id: { in: courseIds } },
         include: { school: true },
@@ -36,7 +36,7 @@ export const courseRouter = createTRPCRouter({
       select: { courseId: true },
     });
     return prisma.course.findMany({
-      where: { id: { in: enrollments.map((e) => e.courseId) } },
+      where: { id: { in: enrollments.map((e: { courseId: string }) => e.courseId) } },
       include: { school: true },
       orderBy: { createdAt: 'desc' },
     });
