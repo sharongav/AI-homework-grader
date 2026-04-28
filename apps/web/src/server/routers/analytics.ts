@@ -208,7 +208,7 @@ export const analyticsRouter = createTRPCRouter({
 
       for (const enrollment of enrollments) {
         const student = enrollment.student;
-        const grades = student.submissions.flatMap((s) => s.grades);
+        const grades = student.submissions.flatMap((s: { grades: Array<{ score: unknown; maxScore: unknown }> }) => s.grades);
         if (grades.length === 0) continue;
 
         const avgPct =
