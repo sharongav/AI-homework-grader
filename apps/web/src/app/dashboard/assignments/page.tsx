@@ -20,7 +20,7 @@ export default function AssignmentsPage() {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  const filtered = mockAssignments.filter((a) => {
+  const filtered = mockAssignments.filter((a: any) => {
     if (statusFilter !== 'all' && a.status !== statusFilter) return false;
     if (search && !a.title.toLowerCase().includes(search.toLowerCase())) return false;
     return true;
@@ -93,7 +93,7 @@ export default function AssignmentsPage() {
               </tr>
             </thead>
             <tbody>
-              {filtered.map((a) => (
+              {filtered.map((a: any) => (
                 <tr key={a.id} className="border-b last:border-0">
                   <td className="p-4 font-medium">{a.title}</td>
                   <td className="p-4 text-sm text-muted-foreground">{a.courseTitle}</td>

@@ -40,12 +40,12 @@ export async function getEligibleMaterialsForAssignment(assignmentId: string) {
   // If explicit prerequisites exist, use them
   if (assignment.prerequisites.length > 0) {
     const materialIds = assignment.prerequisites
-      .filter((p) => p.refType === 'MATERIAL')
-      .map((p) => p.refId);
+      .filter((p: any) => p.refType === 'MATERIAL')
+      .map((p: any) => p.refId);
 
     const chunkIds = assignment.prerequisites
-      .filter((p) => p.refType === 'MATERIAL_CHUNK')
-      .map((p) => p.refId);
+      .filter((p: any) => p.refType === 'MATERIAL_CHUNK')
+      .map((p: any) => p.refId);
 
     const materialChunks = await prisma.materialChunk.findMany({
       where: {

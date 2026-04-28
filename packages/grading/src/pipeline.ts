@@ -289,7 +289,7 @@ export class GradingPipeline {
     let confidenceSum = 0;
 
     for (const cg of output.criterionGrades) {
-      const criterion = criteria.find((c) => c.id === cg.criterionId);
+      const criterion = criteria.find((c: any) => c.id === cg.criterionId);
       const weight = criterion?.weight ?? 1;
       totalScore += cg.score * weight;
       maxTotal += cg.maxScore * weight;

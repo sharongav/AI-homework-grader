@@ -105,7 +105,7 @@ export function FeedbackViewer(props: FeedbackViewerProps) {
         {/* Criterion scores */}
         <div className="mb-6 space-y-3">
           <h4 className="font-semibold">Criteria</h4>
-          {props.criterionScores.map((cs) => (
+          {props.criterionScores.map((cs: any) => (
             <div key={cs.id} className="rounded border bg-card p-3">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium">{cs.name}</span>
@@ -121,7 +121,7 @@ export function FeedbackViewer(props: FeedbackViewerProps) {
         {/* Annotations */}
         <div className="mb-6 space-y-2">
           <h4 className="font-semibold">Annotations</h4>
-          {props.annotations.map((ann) => (
+          {props.annotations.map((ann: Annotation) => (
             <button
               key={ann.id}
               className={`w-full rounded border p-3 text-left text-sm transition-colors ${
@@ -172,7 +172,7 @@ export function FeedbackViewer(props: FeedbackViewerProps) {
             <div>
               <h4 className="mb-2 font-semibold">Concept Mastery</h4>
               <div className="space-y-1">
-                {props.conceptMastery.map((cm, i) => (
+                {props.conceptMastery.map((cm: any, i: number) => (
                   <div key={i} className="flex items-center justify-between rounded border bg-card px-3 py-2 text-sm">
                     <span>{cm.concept}</span>
                     <span className="text-xs font-medium text-muted-foreground">
@@ -223,7 +223,7 @@ function FeedbackSection({
     <div>
       <h4 className="mb-2 font-semibold">{title}</h4>
       <ul className="space-y-1">
-        {items.map((item, i) => (
+        {items.map((item: any, i: number) => (
           <li key={i} className="rounded border bg-card px-3 py-2 text-sm">
             {item}
           </li>

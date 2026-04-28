@@ -23,7 +23,7 @@ export const submissionRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       // Sanitize filenames (§9.1 Layer 3)
-      const sanitizedFiles = input.files.map((f) => ({
+      const sanitizedFiles = input.files.map((f: any) => ({
         ...f,
         name: sanitizeStudentContent(f.name),
       }));
@@ -89,7 +89,7 @@ export const submissionRouter = createTRPCRouter({
         data: {
           assignmentId: input.assignmentId,
           studentId: ctx.userId!,
-          storageKeys: sanitizedFiles.map((f) => f.storageKey),
+          storageKeys: sanitizedFiles.map((f: any) => f.storageKey),
           attemptNumber,
           idempotencyKey,
           status: 'PENDING',
@@ -176,7 +176,7 @@ export const submissionRouter = createTRPCRouter({
 
       // Hard Rule 9: students see approved/released feedback only
       const isStudent = submission.studentId === ctx.userId;
-      const isStaff = ctx.effectiveRoles.some((r) =>
+      const isStaff = ctx.effectiveRoles.some((r: string) =>
         ['GRADER', 'TA', 'PROFESSOR', 'HEAD_OF_COURSE', 'SCHOOL_MANAGER', 'UNIV_ADMIN', 'SUPER_ADMIN'].includes(r),
       );
 
@@ -184,7 +184,7 @@ export const submissionRouter = createTRPCRouter({
         // Filter to only released grades
         return {
           ...submission,
-          grades: submission.grades.filter((g) => g.releasedToStudentAt !== null),
+          grades: submission.grades.filter((g: any) => g.releasedToStudentAt !== null),
         };
       }
 

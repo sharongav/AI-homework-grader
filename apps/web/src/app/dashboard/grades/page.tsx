@@ -20,12 +20,12 @@ const mockGrades: GradeEntry[] = [];
 export default function GradesPage() {
   const [courseFilter, setCourseFilter] = useState('all');
 
-  const filtered = mockGrades.filter((g) => {
+  const filtered = mockGrades.filter((g: GradeEntry) => {
     if (courseFilter !== 'all' && g.courseTitle !== courseFilter) return false;
     return true;
   });
 
-  const courses = [...new Set(mockGrades.map((g) => g.courseTitle))];
+  const courses = [...new Set(mockGrades.map((g: GradeEntry) => g.courseTitle))];
 
   return (
     <div className="space-y-6">
@@ -42,20 +42,20 @@ export default function GradesPage() {
           <div className="text-sm text-muted-foreground">Average Score</div>
           <div className="mt-1 text-2xl font-bold">
             {filtered.length > 0
-              ? `${Math.round(filtered.reduce((sum, g) => sum + (g.score / g.maxScore) * 100, 0) / filtered.length)}%`
+              ? `${Math.round(filtered.reduce((sum: number, g: GradeEntry) => sum + (g.score / g.maxScore) * 100, 0) / filtered.length)}%`
               : '—'}
           </div>
         </div>
         <div className="rounded-lg border bg-card p-4">
           <div className="text-sm text-muted-foreground">Graded</div>
           <div className="mt-1 text-2xl font-bold">
-            {filtered.filter((g) => g.status === 'RELEASED').length}
+            {filtered.filter((g: GradeEntry) => g.status === 'RELEASED').length}
           </div>
         </div>
         <div className="rounded-lg border bg-card p-4">
           <div className="text-sm text-muted-foreground">Pending</div>
           <div className="mt-1 text-2xl font-bold">
-            {filtered.filter((g) => g.status === 'PENDING').length}
+            {filtered.filter((g: GradeEntry) => g.status === 'PENDING').length}
           </div>
         </div>
       </div>
@@ -68,7 +68,7 @@ export default function GradesPage() {
           className="rounded-md border bg-background px-3 py-2 text-sm"
         >
           <option value="all">All Courses</option>
-          {courses.map((c) => (
+          {courses.map((c: string) => (
             <option key={c} value={c}>{c}</option>
           ))}
         </select>
@@ -97,7 +97,7 @@ export default function GradesPage() {
               </tr>
             </thead>
             <tbody>
-              {filtered.map((g) => (
+              {filtered.map((g: GradeEntry) => (
                 <tr key={g.id} className="border-b last:border-0">
                   <td className="p-4 font-medium">{g.assignmentTitle}</td>
                   <td className="p-4 text-sm text-muted-foreground">{g.courseTitle}</td>

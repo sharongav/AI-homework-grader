@@ -47,7 +47,7 @@ export function validateUpload(
   // Magic byte validation for binary formats
   const expectedMagic = MAGIC_BYTES[declaredMime];
   if (expectedMagic && expectedMagic.length > 0) {
-    const matches = expectedMagic.some((magic) =>
+    const matches = expectedMagic.some((magic: any) =>
       buffer.subarray(0, magic.length).equals(magic),
     );
     if (!matches) {

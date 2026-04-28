@@ -52,7 +52,7 @@ export function hasRole(
   if (user.systemRole === role) return true;
 
   return user.courseRoles.some(
-    (ra) => ra.role === role && (!scopeId || ra.scopeId === scopeId),
+    (ra: any) => ra.role === role && (!scopeId || ra.scopeId === scopeId),
   );
 }
 

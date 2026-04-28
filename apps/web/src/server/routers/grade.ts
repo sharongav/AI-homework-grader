@@ -18,7 +18,7 @@ export const gradeRouter = createTRPCRouter({
       }
 
       const isStudent = submission.studentId === ctx.userId;
-      const isStaff = ctx.effectiveRoles.some((r) =>
+      const isStaff = ctx.effectiveRoles.some((r: string) =>
         ['GRADER', 'TA', 'PROFESSOR', 'HEAD_OF_COURSE', 'SCHOOL_MANAGER', 'UNIV_ADMIN', 'SUPER_ADMIN'].includes(r),
       );
 
@@ -293,7 +293,7 @@ export const gradeRouter = createTRPCRouter({
 
       // Hard Rule 9: students see released grades only
       const isStudent = grade.submission.studentId === ctx.userId;
-      const isStaff = ctx.effectiveRoles.some((r) =>
+      const isStaff = ctx.effectiveRoles.some((r: string) =>
         ['GRADER', 'TA', 'PROFESSOR', 'HEAD_OF_COURSE', 'SCHOOL_MANAGER', 'UNIV_ADMIN', 'SUPER_ADMIN'].includes(r),
       );
 

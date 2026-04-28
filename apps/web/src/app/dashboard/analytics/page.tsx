@@ -14,7 +14,7 @@ export default function AnalyticsPage() {
     { label: 'D (60–69)', count: 0, color: 'bg-orange-500' },
     { label: 'F (<60)', count: 0, color: 'bg-red-500' },
   ];
-  const maxCount = Math.max(...gradeDistribution.map((d) => d.count), 1);
+  const maxCount = Math.max(...gradeDistribution.map((d: any) => d.count), 1);
 
   return (
     <div className="space-y-6">
@@ -53,7 +53,7 @@ export default function AnalyticsPage() {
           { label: 'Total Submissions', value: '—', subtext: 'In selected period' },
           { label: 'Average Score', value: '—', subtext: 'Across all graded' },
           { label: 'AI Cost (MTD)', value: '—', subtext: 'OpenAI + embeddings' },
-        ].map((stat) => (
+        ].map((stat: any) => (
           <div key={stat.label} className="rounded-lg border bg-card p-6 shadow-sm">
             <p className="text-sm font-medium text-muted-foreground">{stat.label}</p>
             <p className="mt-2 text-3xl font-bold">{stat.value}</p>
@@ -68,7 +68,7 @@ export default function AnalyticsPage() {
         <div className="rounded-lg border bg-card p-6 shadow-sm">
           <h3 className="mb-4 font-semibold">Grade Distribution</h3>
           <div className="space-y-3">
-            {gradeDistribution.map((d) => (
+            {gradeDistribution.map((d: any) => (
               <div key={d.label} className="flex items-center gap-3">
                 <span className="w-24 text-sm text-muted-foreground">{d.label}</span>
                 <div className="flex-1 rounded-full bg-muted h-6 overflow-hidden">
@@ -81,7 +81,7 @@ export default function AnalyticsPage() {
               </div>
             ))}
           </div>
-          {gradeDistribution.every((d) => d.count === 0) && (
+          {gradeDistribution.every((d: any) => d.count === 0) && (
             <p className="mt-4 text-center text-sm text-muted-foreground">
               No grade data available. Connect database to load data.
             </p>
@@ -92,7 +92,7 @@ export default function AnalyticsPage() {
         <div className="rounded-lg border bg-card p-6 shadow-sm">
           <h3 className="mb-4 font-semibold">Submission Timeline</h3>
           <div className="flex h-48 items-end gap-1">
-            {Array.from({ length: 30 }).map((_, i) => (
+            {Array.from({ length: 30 }).map((_: any, i: number) => (
               <div key={i} className="flex-1 rounded-t bg-primary/20" style={{ height: '2px' }} />
             ))}
           </div>
@@ -115,7 +115,7 @@ export default function AnalyticsPage() {
               { label: 'Held for review', value: '—' },
               { label: 'Human override rate', value: '—' },
               { label: 'Avg. grading latency', value: '—' },
-            ].map((m) => (
+            ].map((m: any) => (
               <div key={m.label} className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">{m.label}</span>
                 <span className="font-medium">{m.value}</span>
@@ -134,7 +134,7 @@ export default function AnalyticsPage() {
               { label: 'Reranking', value: '$0.00' },
               { label: 'Follow-up chat', value: '$0.00' },
               { label: 'Total', value: '$0.00', bold: true },
-            ].map((c) => (
+            ].map((c: any) => (
               <div key={c.label} className={`flex items-center justify-between text-sm ${c.bold ? 'border-t pt-2 font-semibold' : ''}`}>
                 <span className="text-muted-foreground">{c.label}</span>
                 <span className={c.bold ? 'font-bold' : 'font-medium'}>{c.value}</span>

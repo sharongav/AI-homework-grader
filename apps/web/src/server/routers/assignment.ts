@@ -8,7 +8,7 @@ export const assignmentRouter = createTRPCRouter({
   listByCourse: protectedProcedure
     .input(z.object({ courseId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const isStaff = ctx.effectiveRoles.some((r) =>
+      const isStaff = ctx.effectiveRoles.some((r: string) =>
         ['GRADER', 'TA', 'PROFESSOR', 'HEAD_OF_COURSE', 'SCHOOL_MANAGER', 'UNIV_ADMIN', 'SUPER_ADMIN'].includes(r),
       );
 
@@ -308,7 +308,7 @@ export const assignmentRouter = createTRPCRouter({
       });
 
       const created = await prisma.assignmentPrerequisite.createMany({
-        data: input.prerequisites.map((p) => ({
+        data: input.prerequisites.map((p: any) => ({
           assignmentId: input.assignmentId,
           refType: p.refType,
           refId: p.refId,

@@ -151,7 +151,7 @@ export const appealRouter = createTRPCRouter({
       }
 
       // Students can only see their own appeals
-      const isStaff = ctx.effectiveRoles.some((r) =>
+      const isStaff = ctx.effectiveRoles.some((r: string) =>
         ['GRADER', 'TA', 'PROFESSOR', 'HEAD_OF_COURSE', 'SCHOOL_MANAGER', 'UNIV_ADMIN', 'SUPER_ADMIN'].includes(r),
       );
       if (appeal.studentId !== ctx.userId && !isStaff) {

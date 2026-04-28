@@ -13,7 +13,7 @@ export const courseRouter = createTRPCRouter({
       });
     }
 
-    const isStaff = ctx.effectiveRoles.some((r) =>
+    const isStaff = ctx.effectiveRoles.some((r: string) =>
       ['PROFESSOR', 'HEAD_OF_COURSE', 'TA', 'GRADER', 'SCHOOL_MANAGER', 'UNIV_ADMIN'].includes(r),
     );
 
@@ -177,7 +177,7 @@ export const courseRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const lines = input.csvContent.split('\n').filter((l) => l.trim());
+      const lines = input.csvContent.split('\n').filter((l: string) => l.trim());
       const errors: string[] = [];
       let imported = 0;
 
@@ -191,7 +191,7 @@ export const courseRouter = createTRPCRouter({
       }
 
       for (let i = startIdx; i < lines.length; i++) {
-        const parts = lines[i]!.split(',').map((p) => p.trim());
+        const parts = lines[i]!.split(',').map((p: string) => p.trim());
         const email = parts[0];
         const name = parts[1] || '';
 

@@ -63,7 +63,7 @@ export const staffProcedure = protectedProcedure.use(async ({ ctx, next }) => {
     'SUPER_ADMIN',
   ];
 
-  const isStaff = ctx.effectiveRoles.some((r) => staffRoles.includes(r));
+  const isStaff = ctx.effectiveRoles.some((r: string) => staffRoles.includes(r));
   if (!isStaff) {
     throw new TRPCError({
       code: 'FORBIDDEN',
@@ -78,7 +78,7 @@ export const staffProcedure = protectedProcedure.use(async ({ ctx, next }) => {
  */
 export const adminProcedure = protectedProcedure.use(async ({ ctx, next }) => {
   const adminRoles = ['UNIVERSITY_ADMIN', 'SUPER_ADMIN'];
-  const isAdmin = ctx.effectiveRoles.some((r) => adminRoles.includes(r));
+  const isAdmin = ctx.effectiveRoles.some((r: string) => adminRoles.includes(r));
   if (!isAdmin) {
     throw new TRPCError({
       code: 'FORBIDDEN',

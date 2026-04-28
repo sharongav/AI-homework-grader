@@ -27,7 +27,7 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
       </div>
       <nav className="border-b px-6">
         <div className="flex gap-4 overflow-x-auto">
-          {platformNav.map((item) => (
+          {platformNav.map((item: any) => (
             <Link
               key={item.href}
               href={item.href}

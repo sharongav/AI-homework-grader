@@ -16,7 +16,7 @@ export default function BillingPage() {
           { label: 'Budget Remaining', value: '$—' },
           { label: 'Projected End-of-Term', value: '$—' },
           { label: 'Budget Used', value: '—%' },
-        ].map((stat) => (
+        ].map((stat: any) => (
           <div key={stat.label} className="rounded-lg border p-4">
             <p className="text-sm text-muted-foreground">{stat.label}</p>
             <p className="text-2xl font-bold mt-1">{stat.value}</p>

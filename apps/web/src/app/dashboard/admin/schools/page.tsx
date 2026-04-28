@@ -17,7 +17,7 @@ export default function SchoolsPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [search, setSearch] = useState('');
 
-  const filtered = mockSchools.filter((s) =>
+  const filtered = mockSchools.filter((s: any) =>
     !search || s.name.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -58,7 +58,7 @@ export default function SchoolsPage() {
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((school) => (
+          {filtered.map((school: any) => (
             <div key={school.id} className="rounded-lg border bg-card p-6 shadow-sm">
               <h3 className="text-lg font-semibold">{school.name}</h3>
               <div className="mt-3 space-y-2 text-sm text-muted-foreground">

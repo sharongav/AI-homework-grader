@@ -114,7 +114,7 @@ export default function AssignmentDetailPage({
       {/* Tab Navigation */}
       <div className="border-b border-border">
         <nav className="flex gap-4">
-          {tabs.map((tab) => (
+          {tabs.map((tab: any) => (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
@@ -174,7 +174,7 @@ export default function AssignmentDetailPage({
           </div>
 
           <div className="space-y-3">
-            {rubricCriteria.map((criterion) => (
+            {rubricCriteria.map((criterion: any) => (
               <div key={criterion.id} className="rounded-lg border border-border bg-card p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -191,7 +191,7 @@ export default function AssignmentDetailPage({
                   </div>
                 </div>
                 <div className="mt-2 flex gap-2">
-                  {criterion.levels.map((level) => (
+                  {criterion.levels.map((level: any) => (
                     <span
                       key={level}
                       className="rounded border border-border px-2 py-0.5 text-xs text-muted-foreground"
@@ -226,7 +226,7 @@ export default function AssignmentDetailPage({
           </div>
 
           <div className="space-y-2">
-            {prerequisites.map((prereq) => (
+            {prerequisites.map((prereq: any) => (
               <div
                 key={prereq.id}
                 className="flex items-center justify-between rounded-lg border border-border bg-card p-3"

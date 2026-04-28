@@ -132,8 +132,8 @@ export function semanticChunk(
 function splitIntoParagraphs(text: string): string[] {
   return text
     .split(/\n\n+/)
-    .map((p) => p.trim())
-    .filter((p) => p.length > 0);
+    .map((p: string) => p.trim())
+    .filter((p: string) => p.length > 0);
 }
 
 function findPageNumber(

@@ -19,7 +19,7 @@ export default function PlatformAnalyticsPage() {
           { label: 'Failure Rate', value: '—' },
           { label: 'Chat Volume', value: '—' },
           { label: 'Rubric Accept Rate', value: '—' },
-        ].map((stat) => (
+        ].map((stat: any) => (
           <div key={stat.label} className="rounded-lg border p-4">
             <p className="text-sm text-muted-foreground">{stat.label}</p>
             <p className="text-2xl font-bold mt-1">{stat.value}</p>

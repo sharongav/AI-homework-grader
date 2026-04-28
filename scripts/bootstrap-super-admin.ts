@@ -46,7 +46,7 @@ async function main() {
 
   const backupCodes = Array.from({ length: 8 }, () => randomBytes(5).toString('hex'));
   console.log('\nBackup codes (save these — shown ONLY ONCE):');
-  backupCodes.forEach((code, i) => console.log(`  ${i + 1}. ${code}`));
+  backupCodes.forEach((code: string, i: number) => console.log(`  ${i + 1}. ${code}`));
 
   console.log('\n✓ Super Admin account created.');
   console.log('  - Use the claim token to complete account setup at /admin/platform/claim');

@@ -211,7 +211,7 @@ export const chatRouter = createTRPCRouter({
       }
 
       // Students can only see their own threads; staff can see any
-      const isStaff = ctx.effectiveRoles.some((r) =>
+      const isStaff = ctx.effectiveRoles.some((r: string) =>
         ['GRADER', 'TA', 'PROFESSOR', 'HEAD_OF_COURSE', 'SCHOOL_MANAGER', 'UNIV_ADMIN', 'SUPER_ADMIN'].includes(r),
       );
       if (thread.studentId !== ctx.userId && !isStaff) {

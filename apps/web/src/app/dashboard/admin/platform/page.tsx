@@ -14,7 +14,7 @@ export default function PlatformOverviewPage() {
           { label: 'Total Submissions Today', value: '—' },
           { label: 'Active Grading Jobs', value: '—' },
           { label: 'Platform Spend (MTD)', value: '—' },
-        ].map((stat) => (
+        ].map((stat: any) => (
           <div key={stat.label} className="rounded-lg border p-4">
             <p className="text-sm text-muted-foreground">{stat.label}</p>
             <p className="text-2xl font-bold mt-1">{stat.value}</p>

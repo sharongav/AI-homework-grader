@@ -42,7 +42,7 @@ export default function ModelRoutingPage() {
       </p>
 
       <div className="space-y-4">
-        {models.map((model) => (
+        {models.map((model: any) => (
           <div key={model.label} className="rounded-lg border p-6">
             <h2 className="font-semibold">{model.label}</h2>
             <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4">

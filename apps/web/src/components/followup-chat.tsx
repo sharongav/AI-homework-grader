@@ -39,7 +39,7 @@ export function FollowUpChat({
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const remainingMessages = maxMessages - messagesUsed - messages.filter((m) => m.role === 'student').length;
+  const remainingMessages = maxMessages - messagesUsed - messages.filter((m: any) => m.role === 'student').length;
   const isAtLimit = remainingMessages <= 0;
 
   useEffect(() => {
@@ -109,7 +109,7 @@ export function FollowUpChat({
           </div>
         )}
 
-        {messages.map((msg) => (
+        {messages.map((msg: any) => (
           <div
             key={msg.id}
             className={`flex ${msg.role === 'student' ? 'justify-end' : 'justify-start'}`}
@@ -124,7 +124,7 @@ export function FollowUpChat({
               <p>{msg.content}</p>
               {msg.citations && msg.citations.length > 0 && (
                 <div className="mt-2 space-y-1 border-t pt-2">
-                  {msg.citations.map((cite, i) => (
+                  {msg.citations.map((cite: any, i: number) => (
                     <p key={i} className="text-xs opacity-80">
                       📖 {cite.sectionPath}
                     </p>

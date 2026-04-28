@@ -230,6 +230,6 @@ export const analyticsRouter = createTRPCRouter({
         }
       }
 
-      return atRisk.sort((a, b) => a.averageScore - b.averageScore);
+      return atRisk.sort((a: any, b: any) => a.averageScore - b.averageScore);
     }),
 });

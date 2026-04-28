@@ -74,7 +74,7 @@ export function rrfFusion(
 
   return Array.from(scores.entries())
     .map(([id, score]) => ({ id, score }))
-    .sort((a, b) => b.score - a.score);
+    .sort((a: any, b: any) => b.score - a.score);
 }
 
 // ─── Service ─────────────────────────────────────────────────
@@ -109,8 +109,8 @@ export class RetrievalService {
     }
 
     // RRF fusion within dense, within sparse, then cross-variant
-    const fusedDense = rrfFusion([denseCandidates.length > 0 ? denseCandidates.map((c, i) => ({ ...c })).sort((a, b) => b.score - a.score) : []], 60);
-    const fusedSparse = rrfFusion([sparseCandidates.length > 0 ? sparseCandidates.map((c, i) => ({ ...c })).sort((a, b) => b.score - a.score) : []], 60);
+    const fusedDense = rrfFusion([denseCandidates.length > 0 ? denseCandidates.map((c: any, i: number) => ({ ...c })).sort((a: any, b: any) => b.score - a.score) : []], 60);
+    const fusedSparse = rrfFusion([sparseCandidates.length > 0 ? sparseCandidates.map((c: any, i: number) => ({ ...c })).sort((a: any, b: any) => b.score - a.score) : []], 60);
     const fusedCandidates = rrfFusion([fusedDense, fusedSparse], 60);
 
     // Step D: Cross-encoder reranking via Cohere rerank-v3.5
@@ -132,23 +132,23 @@ export class RetrievalService {
       id: crypto.randomUUID(),
       queryVariants,
       hydeAnswers,
-      denseCandidates: denseCandidates.map((c) => ({
+      denseCandidates: denseCandidates.map((c: any) => ({
         chunkId: c.id,
         score: c.score,
       })),
-      sparseCandidates: sparseCandidates.map((c) => ({
+      sparseCandidates: sparseCandidates.map((c: any) => ({
         chunkId: c.id,
         score: c.score,
       })),
-      fusedCandidates: fusedCandidates.map((c) => ({
+      fusedCandidates: fusedCandidates.map((c: any) => ({
         chunkId: c.id,
         score: c.score,
       })),
-      rerankResults: rerankResults.map((c) => ({
+      rerankResults: rerankResults.map((c: any) => ({
         chunkId: c.id,
         score: c.score,
       })),
-      finalTopK: topChunks.map((c) => ({ chunkId: c.id, score: c.score })),
+      finalTopK: topChunks.map((c: any) => ({ chunkId: c.id, score: c.score })),
       retrievalConfigId: 'default',
     };
 
@@ -214,7 +214,7 @@ export class RetrievalService {
     chunks: Array<{ id: string; score: number }>,
   ): Promise<RetrievedChunk[]> {
     // TODO: Replace CHILD chunks with their PARENT chunks for full context
-    return chunks.map((c) => ({
+    return chunks.map((c: any) => ({
       id: c.id,
       text: '',
       sectionHeadingPath: '',

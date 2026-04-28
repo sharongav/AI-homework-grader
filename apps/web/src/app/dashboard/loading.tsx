@@ -12,7 +12,7 @@ export default function DashboardLoading() {
 
       {/* Stats grid skeleton */}
       <div className="grid grid-cols-4 gap-4">
-        {[1, 2, 3, 4].map((i) => (
+        {[1, 2, 3, 4].map((i: number) => (
           <div key={i} className="rounded-lg border border-border bg-card p-6">
             <div className="h-4 w-24 rounded bg-accent" />
             <div className="mt-3 h-8 w-16 rounded bg-accent" />
@@ -25,7 +25,7 @@ export default function DashboardLoading() {
         <div className="border-b border-border p-4">
           <div className="h-5 w-32 rounded bg-accent" />
         </div>
-        {[1, 2, 3, 4, 5].map((i) => (
+        {[1, 2, 3, 4, 5].map((i: number) => (
           <div key={i} className="flex items-center gap-4 border-b border-border p-4 last:border-0">
             <div className="h-4 w-32 rounded bg-accent" />
             <div className="h-4 w-24 rounded bg-accent" />

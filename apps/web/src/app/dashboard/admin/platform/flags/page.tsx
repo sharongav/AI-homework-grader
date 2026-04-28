@@ -35,7 +35,7 @@ export default function FeatureFlagsPage() {
             </tr>
           </thead>
           <tbody>
-            {flags.map((flag) => (
+            {flags.map((flag: any) => (
               <tr key={flag.key} className="border-b">
                 <td className="p-3">{flag.label}</td>
                 <td className="p-3 text-muted-foreground">{flag.scope}</td>

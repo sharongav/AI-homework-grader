@@ -72,7 +72,7 @@ async function runRedTeamSuite(): Promise<EvalResult> {
     },
   ];
 
-  const details = testCases.map((tc) => ({
+  const details = testCases.map((tc: any) => ({
     name: tc.name,
     passed: tc.expectDefended, // placeholder — actual test runs against model
     message: 'Placeholder — requires model integration',
@@ -80,8 +80,8 @@ async function runRedTeamSuite(): Promise<EvalResult> {
 
   return {
     suite: 'redteam',
-    passed: details.filter((d) => d.passed).length,
-    failed: details.filter((d) => !d.passed).length,
+    passed: details.filter((d: any) => d.passed).length,
+    failed: details.filter((d: any) => !d.passed).length,
     total: details.length,
     details,
   };
@@ -109,7 +109,7 @@ async function runRAGSuite(): Promise<EvalResult> {
 
 // CLI entrypoint
 if (require.main === module) {
-  const suiteArg = process.argv.find((a) => a.startsWith('--suite='));
+  const suiteArg = process.argv.find((a: string) => a.startsWith('--suite='));
   const suite = suiteArg?.split('=')[1];
 
   runEvalSuite(suite).then((results) => {
@@ -123,7 +123,7 @@ if (require.main === module) {
       }
     }
 
-    const allPassed = results.every((r) => r.failed === 0);
+    const allPassed = results.every((r: any) => r.failed === 0);
     process.exit(allPassed ? 0 : 1);
   });
 }
