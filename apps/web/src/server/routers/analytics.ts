@@ -212,7 +212,7 @@ export const analyticsRouter = createTRPCRouter({
         if (grades.length === 0) continue;
 
         const avgPct =
-          grades.reduce((sum, g) => sum + (Number(g.score) / Number(g.maxScore)) * 100, 0) /
+          grades.reduce((sum: number, g: { score: unknown; maxScore: unknown }) => sum + (Number(g.score) / Number(g.maxScore)) * 100, 0) /
           grades.length;
 
         if (avgPct < input.threshold) {
