@@ -160,7 +160,7 @@ export const analyticsRouter = createTRPCRouter({
 
       return {
         concepts,
-        students: enrollments.map((e) => ({
+        students: enrollments.map((e: { student: { id: string; name: string | null } }) => ({
           id: e.student.id,
           name: e.student.name,
           mastery: masteryMap[e.student.id] ?? {},
