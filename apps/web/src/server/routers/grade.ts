@@ -193,7 +193,7 @@ export const gradeRouter = createTRPCRouter({
 
       // Block bulk release on low-confidence grades
       const lowConfidence = grades.filter(
-        (g) => g.aiConfidence < (g.submission.assignment.autoReleaseConfidenceThreshold ?? 0.9),
+        (g: { aiConfidence: number; submission: { assignment: { autoReleaseConfidenceThreshold: number | null } } }) => g.aiConfidence < (g.submission.assignment.autoReleaseConfidenceThreshold ?? 0.9),
       );
       if (lowConfidence.length > 0) {
         throw new TRPCError({
