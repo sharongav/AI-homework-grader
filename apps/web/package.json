@@ -11,6 +11,10 @@
   },
   "dependencies": {
     "@homework-platform/db": "workspace:*",
+    "@homework-platform/grading": "workspace:*",
+    "@homework-platform/config": "workspace:*",
+    "@homework-platform/prompts": "workspace:*",
+    "@homework-platform/retrieval": "workspace:*",
     "@homework-platform/types": "workspace:*",
     "@homework-platform/ui": "workspace:*",
     "@homework-platform/auth": "workspace:*",
@@ -21,6 +25,7 @@
     "@trpc/server": "^11.0.0-rc.660",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
     "lucide-react": "^0.468.0",
     "next": "^15.1.4",
     "next-intl": "^3.25.3",

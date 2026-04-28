@@ -1,0 +1,124 @@
+openapi: 3.1.0
+info:
+  title: Homework Platform API
+  version: 1.0.0
+  description: |
+    Public API for LMS integrators per Phase 17.
+    Authentication via Bearer token or LTI 1.3.
+  contact:
+    email: api@homework-platform.com
+
+servers:
+  - url: https://api.homework-platform.com/v1
+    description: Production
+  - url: https://staging-api.homework-platform.com/v1
+    description: Staging
+
+security:
+  - bearerAuth: []
+
+paths:
+  /health:
+    get:
+      summary: Health check
+      operationId: healthCheck
+      security: []
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+
+  /lti/launch:
+    post:
+      summary: LTI 1.3 Launch
+      operationId: ltiLaunch
+      tags: [LTI]
+      security: []
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id_token:
+                  type: string
+      responses:
+        '302':
+          description: Redirect to platform UI
+
+  /courses/{courseId}/gradebook:
+    get:
+      summary: Export gradebook
+      operationId: exportGradebook
+      tags: [Gradebook]
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: format
+          in: query
+          schema:
+            type: string
+            enum: [csv, xlsx]
+            default: csv
+      responses:
+        '200':
+          description: Gradebook export
+          content:
+            text/csv: {}
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet: {}
+
+  /courses/{courseId}/calendar.ics:
+    get:
+      summary: Calendar feed (ICS)
+      operationId: calendarFeed
+      tags: [Calendar]
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ICS calendar feed
+          content:
+            text/calendar: {}
+
+  /gdpr/export:
+    post:
+      summary: GDPR data export
+      operationId: gdprExport
+      tags: [GDPR]
+      responses:
+        '200':
+          description: User data export
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /gdpr/delete:
+    post:
+      summary: GDPR data deletion
+      operationId: gdprDelete
+      tags: [GDPR]
+      responses:
+        '202':
+          description: Deletion request accepted
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -3,3 +3,8 @@ export { Button } from './components/button';
 export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from './components/card';
 export { Badge } from './components/badge';
 export { Skeleton } from './components/skeleton';
+export { Input } from './components/input';
+export { Textarea } from './components/textarea';
+export { Dialog, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from './components/dialog';
+export { Toast } from './components/toast';
+export { ErrorBoundary, EmptyState, PageSkeleton } from './components/error-boundary';

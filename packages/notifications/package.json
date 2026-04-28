@@ -7,7 +7,8 @@
   "scripts": { "typecheck": "tsc --noEmit" },
   "dependencies": {
     "@homework-platform/db": "workspace:*",
-    "@homework-platform/types": "workspace:*"
+    "@homework-platform/types": "workspace:*",
+    "resend": "^4.5.0"
   },
   "devDependencies": { "typescript": "^5.7.3" }
 }

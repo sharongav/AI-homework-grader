@@ -6,6 +6,13 @@ const nextConfig = {
     '@homework-platform/types',
     '@homework-platform/db',
     '@homework-platform/auth',
+    '@homework-platform/grading',
+    '@homework-platform/config',
+    '@homework-platform/notifications',
+    '@homework-platform/observability',
+    '@homework-platform/prompts',
+    '@homework-platform/retrieval',
+    '@homework-platform/evals',
   ],
   experimental: {
     serverActions: {

@@ -1,0 +1,117 @@
+{
+  "app": {
+    "title": "AI Homework Grader",
+    "description": "University homework grading platform powered by AI"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "courses": "Courses",
+    "assignments": "Assignments",
+    "grades": "Grades",
+    "materials": "Materials",
+    "review": "Review Queue",
+    "analytics": "Analytics",
+    "settings": "Settings",
+    "signIn": "Sign In",
+    "signUp": "Get Started",
+    "signOut": "Sign Out"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Create Account",
+    "email": "Email",
+    "password": "Password",
+    "name": "Full Name",
+    "signInPrompt": "Enter your credentials to access the platform",
+    "signUpPrompt": "Sign up to start using the AI Homework Grader",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "passwordMinLength": "Must be at least 12 characters. Staff accounts require 2FA setup after sign-up.",
+    "twoFactorTitle": "Two-Factor Authentication",
+    "twoFactorSetup": "Set up 2FA to secure your account",
+    "twoFactorChallenge": "Enter the code from your authenticator app",
+    "backupCodes": "Save your backup codes in a safe place"
+  },
+  "dashboard": {
+    "welcome": "Welcome back",
+    "overview": "Here is an overview of your courses and recent activity.",
+    "activeCourses": "Active Courses",
+    "pendingAssignments": "Pending Assignments",
+    "recentGrades": "Recent Grades",
+    "reviewQueue": "Review Queue",
+    "recentActivity": "Recent Activity",
+    "noActivity": "No recent activity. Submit your first assignment to get started.",
+    "upcomingAssignments": "Upcoming Assignments",
+    "noUpcoming": "No upcoming assignments."
+  },
+  "course": {
+    "create": "Create Course",
+    "name": "Course Name",
+    "code": "Course Code",
+    "term": "Term",
+    "school": "School",
+    "students": "Students",
+    "assignments": "Assignments",
+    "materials": "Materials",
+    "settings": "Course Settings",
+    "roster": "Upload Roster (CSV)"
+  },
+  "assignment": {
+    "create": "Create Assignment",
+    "title": "Title",
+    "dueDate": "Due Date",
+    "submissions": "Submissions",
+    "rubric": "Rubric",
+    "suggestCriteria": "Suggest Criteria (AI)",
+    "autoRelease": "Auto-release",
+    "maxResubmissions": "Max Resubmissions",
+    "latePolicy": "Late Policy"
+  },
+  "submission": {
+    "submit": "Submit",
+    "resubmit": "Resubmit",
+    "status": "Status",
+    "uploadFiles": "Upload Files",
+    "submitted": "Submitted",
+    "processing": "Processing",
+    "graded": "Graded",
+    "released": "Released"
+  },
+  "grade": {
+    "score": "Score",
+    "feedback": "Feedback",
+    "approve": "Approve",
+    "override": "Override",
+    "release": "Release",
+    "draft": "Draft (AI)",
+    "approved": "Approved",
+    "released": "Released",
+    "confidence": "Confidence",
+    "criteria": "Criteria",
+    "evidence": "Evidence",
+    "deduction": "Deduction",
+    "strength": "Strength",
+    "observation": "Observation"
+  },
+  "review": {
+    "title": "Review Queue",
+    "description": "AI-graded submissions awaiting your review",
+    "sortByConfidence": "Lowest confidence first",
+    "approveAll": "Approve Selected",
+    "noItems": "No submissions pending review."
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "search": "Search",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "noResults": "No results found",
+    "page": "Page",
+    "of": "of",
+    "next": "Next",
+    "previous": "Previous"
+  }
+}

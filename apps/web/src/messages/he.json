@@ -1,0 +1,117 @@
+{
+  "app": {
+    "title": "מתקן בדיקות שיעורי בית AI",
+    "description": "פלטפורמה אוניברסיטאית לבדיקת שיעורי בית מופעלת בינה מלאכותית"
+  },
+  "nav": {
+    "dashboard": "לוח בקרה",
+    "courses": "קורסים",
+    "assignments": "מטלות",
+    "grades": "ציונים",
+    "materials": "חומרי לימוד",
+    "review": "תור ביקורת",
+    "analytics": "אנליטיקה",
+    "settings": "הגדרות",
+    "signIn": "התחברות",
+    "signUp": "הרשמה",
+    "signOut": "התנתקות"
+  },
+  "auth": {
+    "signIn": "התחברות",
+    "signUp": "יצירת חשבון",
+    "email": "דוא\"ל",
+    "password": "סיסמה",
+    "name": "שם מלא",
+    "signInPrompt": "הכנס את פרטי ההתחברות שלך כדי לגשת לפלטפורמה",
+    "signUpPrompt": "הירשם כדי להתחיל להשתמש במתקן הבדיקות",
+    "noAccount": "אין לך חשבון?",
+    "hasAccount": "כבר יש לך חשבון?",
+    "passwordMinLength": "חייב להיות לפחות 12 תווים. חשבונות צוות דורשים הגדרת אימות דו-שלבי.",
+    "twoFactorTitle": "אימות דו-שלבי",
+    "twoFactorSetup": "הגדר אימות דו-שלבי לאבטחת החשבון שלך",
+    "twoFactorChallenge": "הכנס את הקוד מאפליקציית האימות",
+    "backupCodes": "שמור את קודי הגיבוי במקום בטוח"
+  },
+  "dashboard": {
+    "welcome": "ברוך הבא",
+    "overview": "הנה סקירה של הקורסים והפעילות האחרונה שלך.",
+    "activeCourses": "קורסים פעילים",
+    "pendingAssignments": "מטלות ממתינות",
+    "recentGrades": "ציונים אחרונים",
+    "reviewQueue": "תור ביקורת",
+    "recentActivity": "פעילות אחרונה",
+    "noActivity": "אין פעילות אחרונה. שלח את המטלה הראשונה שלך כדי להתחיל.",
+    "upcomingAssignments": "מטלות קרובות",
+    "noUpcoming": "אין מטלות קרובות."
+  },
+  "course": {
+    "create": "יצירת קורס",
+    "name": "שם הקורס",
+    "code": "קוד הקורס",
+    "term": "סמסטר",
+    "school": "מחלקה",
+    "students": "תלמידים",
+    "assignments": "מטלות",
+    "materials": "חומרי לימוד",
+    "settings": "הגדרות הקורס",
+    "roster": "העלאת רשימת תלמידים (CSV)"
+  },
+  "assignment": {
+    "create": "יצירת מטלה",
+    "title": "כותרת",
+    "dueDate": "תאריך הגשה",
+    "submissions": "הגשות",
+    "rubric": "רובריקה",
+    "suggestCriteria": "הצע קריטריונים (AI)",
+    "autoRelease": "שחרור אוטומטי",
+    "maxResubmissions": "מספר הגשות חוזרות מקסימלי",
+    "latePolicy": "מדיניות איחורים"
+  },
+  "submission": {
+    "submit": "הגש",
+    "resubmit": "הגש מחדש",
+    "status": "סטטוס",
+    "uploadFiles": "העלה קבצים",
+    "submitted": "הוגש",
+    "processing": "בעיבוד",
+    "graded": "נבדק",
+    "released": "שוחרר"
+  },
+  "grade": {
+    "score": "ציון",
+    "feedback": "משוב",
+    "approve": "אשר",
+    "override": "דרוס ציון",
+    "release": "שחרר",
+    "draft": "טיוטה (AI)",
+    "approved": "מאושר",
+    "released": "שוחרר",
+    "confidence": "רמת ביטחון",
+    "criteria": "קריטריונים",
+    "evidence": "ראיות",
+    "deduction": "ניכוי",
+    "strength": "חוזק",
+    "observation": "הערה"
+  },
+  "review": {
+    "title": "תור ביקורת",
+    "description": "הגשות שנבדקו על ידי AI וממתינות לביקורת שלך",
+    "sortByConfidence": "רמת ביטחון נמוכה ראשון",
+    "approveAll": "אשר נבחרים",
+    "noItems": "אין הגשות ממתינות לביקורת."
+  },
+  "common": {
+    "save": "שמור",
+    "cancel": "ביטול",
+    "delete": "מחק",
+    "edit": "ערוך",
+    "search": "חיפוש",
+    "loading": "טוען...",
+    "error": "אירעה שגיאה",
+    "noResults": "לא נמצאו תוצאות",
+    "page": "עמוד",
+    "of": "מתוך",
+    "next": "הבא",
+    "previous": "הקודם"
+  }
+}

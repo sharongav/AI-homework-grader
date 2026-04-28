@@ -8,6 +8,8 @@
   "dependencies": {
     "@homework-platform/db": "workspace:*",
     "@homework-platform/types": "workspace:*",
+    "cohere-ai": "^7.17.0",
+    "openai": "^6.34.0",
     "zod": "^3.24.1"
   },
   "devDependencies": { "typescript": "^5.7.3" }

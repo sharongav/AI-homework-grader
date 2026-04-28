@@ -1,6 +1,8 @@
 import { Worker, Queue } from 'bullmq';
 import { Redis } from 'ioredis';
 import pino from 'pino';
+import { GradingPipeline } from '@homework-platform/grading';
+import type { GradingJobData } from '@homework-platform/grading';
 
 const logger = pino({
   transport:
@@ -20,16 +22,26 @@ export const ingestionQueue = new Queue('material-ingestion', { connection });
 export const notificationQueue = new Queue('notifications', { connection });
 
 // ── Grading Worker ───────────────────────────────────────────
+const pipeline = new GradingPipeline();
+
 const gradingWorker = new Worker(
   'grading',
   async (job) => {
-    const { submissionId } = job.data;
-    logger.info({ submissionId, jobId: job.id }, 'Processing grading job');
+    const data = job.data as GradingJobData;
+    logger.info({ submissionId: data.submissionId, jobId: job.id }, 'Processing grading job');
 
-    // Placeholder — Phase 8 implements the full pipeline from §8.2
-    logger.info({ submissionId }, 'Grading pipeline not yet implemented');
+    const result = await pipeline.execute(data);
 
-    return { status: 'pending', submissionId };
+    if (!result.success) {
+      throw new Error(result.reason || 'Grading pipeline failed');
+    }
+
+    logger.info(
+      { submissionId: data.submissionId, outcome: result.outcome, durationMs: result.durationMs },
+      'Grading pipeline completed',
+    );
+
+    return result;
   },
   {
     connection,

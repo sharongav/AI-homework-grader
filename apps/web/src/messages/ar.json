@@ -1,0 +1,117 @@
+{
+  "app": {
+    "title": "مصحح الواجبات بالذكاء الاصطناعي",
+    "description": "منصة جامعية لتصحيح الواجبات المنزلية مدعومة بالذكاء الاصطناعي"
+  },
+  "nav": {
+    "dashboard": "لوحة التحكم",
+    "courses": "المقررات",
+    "assignments": "الواجبات",
+    "grades": "الدرجات",
+    "materials": "المواد التعليمية",
+    "review": "قائمة المراجعة",
+    "analytics": "التحليلات",
+    "settings": "الإعدادات",
+    "signIn": "تسجيل الدخول",
+    "signUp": "إنشاء حساب",
+    "signOut": "تسجيل الخروج"
+  },
+  "auth": {
+    "signIn": "تسجيل الدخول",
+    "signUp": "إنشاء حساب",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "name": "الاسم الكامل",
+    "signInPrompt": "أدخل بيانات الاعتماد الخاصة بك للوصول إلى المنصة",
+    "signUpPrompt": "سجل لبدء استخدام مصحح الواجبات",
+    "noAccount": "ليس لديك حساب؟",
+    "hasAccount": "لديك حساب بالفعل؟",
+    "passwordMinLength": "يجب أن تكون 12 حرفًا على الأقل. حسابات الموظفين تتطلب إعداد المصادقة الثنائية.",
+    "twoFactorTitle": "المصادقة الثنائية",
+    "twoFactorSetup": "قم بإعداد المصادقة الثنائية لتأمين حسابك",
+    "twoFactorChallenge": "أدخل الرمز من تطبيق المصادقة",
+    "backupCodes": "احفظ رموز النسخ الاحتياطي في مكان آمن"
+  },
+  "dashboard": {
+    "welcome": "مرحبًا بعودتك",
+    "overview": "إليك نظرة عامة على مقرراتك ونشاطك الأخير.",
+    "activeCourses": "المقررات النشطة",
+    "pendingAssignments": "الواجبات المعلقة",
+    "recentGrades": "الدرجات الأخيرة",
+    "reviewQueue": "قائمة المراجعة",
+    "recentActivity": "النشاط الأخير",
+    "noActivity": "لا يوجد نشاط حديث. أرسل واجبك الأول للبدء.",
+    "upcomingAssignments": "الواجبات القادمة",
+    "noUpcoming": "لا توجد واجبات قادمة."
+  },
+  "course": {
+    "create": "إنشاء مقرر",
+    "name": "اسم المقرر",
+    "code": "رمز المقرر",
+    "term": "الفصل الدراسي",
+    "school": "الكلية",
+    "students": "الطلاب",
+    "assignments": "الواجبات",
+    "materials": "المواد التعليمية",
+    "settings": "إعدادات المقرر",
+    "roster": "تحميل قائمة الطلاب (CSV)"
+  },
+  "assignment": {
+    "create": "إنشاء واجب",
+    "title": "العنوان",
+    "dueDate": "تاريخ التسليم",
+    "submissions": "التسليمات",
+    "rubric": "معايير التقييم",
+    "suggestCriteria": "اقتراح معايير (AI)",
+    "autoRelease": "إصدار تلقائي",
+    "maxResubmissions": "الحد الأقصى لإعادة التسليم",
+    "latePolicy": "سياسة التأخير"
+  },
+  "submission": {
+    "submit": "تسليم",
+    "resubmit": "إعادة التسليم",
+    "status": "الحالة",
+    "uploadFiles": "تحميل الملفات",
+    "submitted": "تم التسليم",
+    "processing": "قيد المعالجة",
+    "graded": "تم التصحيح",
+    "released": "تم الإصدار"
+  },
+  "grade": {
+    "score": "الدرجة",
+    "feedback": "التعليقات",
+    "approve": "موافقة",
+    "override": "تجاوز",
+    "release": "إصدار",
+    "draft": "مسودة (AI)",
+    "approved": "موافق عليه",
+    "released": "تم الإصدار",
+    "confidence": "مستوى الثقة",
+    "criteria": "المعايير",
+    "evidence": "الأدلة",
+    "deduction": "خصم",
+    "strength": "نقطة قوة",
+    "observation": "ملاحظة"
+  },
+  "review": {
+    "title": "قائمة المراجعة",
+    "description": "التسليمات المصححة بالذكاء الاصطناعي في انتظار مراجعتك",
+    "sortByConfidence": "الأقل ثقة أولاً",
+    "approveAll": "الموافقة على المحدد",
+    "noItems": "لا توجد تسليمات في انتظار المراجعة."
+  },
+  "common": {
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "search": "بحث",
+    "loading": "جارٍ التحميل...",
+    "error": "حدث خطأ",
+    "noResults": "لم يتم العثور على نتائج",
+    "page": "صفحة",
+    "of": "من",
+    "next": "التالي",
+    "previous": "السابق"
+  }
+}

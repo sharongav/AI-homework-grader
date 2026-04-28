@@ -254,6 +254,7 @@ model School {
   universityId String
   name         String
   code         String
+  managerIds   String[] @default([])
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -297,6 +298,7 @@ model User {
   conceptSuggestionsActioned ConceptSuggestion[] @relation("ConceptSuggestionActioned")
   platformConfigSuperAdmin PlatformConfig? @relation("PlatformSuperAdmin")
   platformConfigUpdatedBy  PlatformConfig[] @relation("PlatformUpdatedBy")
+  promptVersionsCreated    PromptVersion[] @relation("PromptVersionCreatedBy")
 
   @@index([universityId])
   @@index([email])
@@ -747,6 +749,7 @@ model RetrievalSnapshot {
   submissionId        String
   retrievedAt         DateTime @default(now())
   materialChunkIds    String[] @default([])
+  queryEmbedding      Unsupported("vector(1024)")?
   denseScores         Json     @default("{}")
   sparseScores        Json     @default("{}")
   fusedScores         Json     @default("{}")
@@ -790,6 +793,8 @@ model PromptVersion {
   createdById  String?
   retiredAt    DateTime?
   createdAt    DateTime  @default(now())
+
+  createdBy User? @relation("PromptVersionCreatedBy", fields: [createdById], references: [id])
 
   @@index([name])
 }

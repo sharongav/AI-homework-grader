@@ -9,9 +9,12 @@
   },
   "dependencies": {
     "@homework-platform/db": "workspace:*",
-    "@homework-platform/types": "workspace:*",
     "@homework-platform/prompts": "workspace:*",
     "@homework-platform/retrieval": "workspace:*",
+    "@homework-platform/types": "workspace:*",
+    "openai": "^6.34.0",
+    "mammoth": "^1.8.0",
+    "pdfjs-dist": "^4.10.38",
     "zod": "^3.24.1"
   },
   "devDependencies": {

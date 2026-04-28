@@ -6,3 +6,5 @@ export { hydePromptV1 } from './hyde/v1';
 export { queryRewritePromptV1 } from './queryRewrite/v1';
 export { followupChatPromptV1 } from './followupChat/v1';
 export { rubricSuggestionPromptV1 } from './rubricSuggestion/v1';
+export { conceptExtractionPromptV1 } from './conceptExtraction/v1';
+export { contextualCompressionPromptV1 } from './contextualCompression/v1';
