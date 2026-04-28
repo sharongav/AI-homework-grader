@@ -58,7 +58,7 @@ export const analyticsRouter = createTRPCRouter({
         }),
       ]);
 
-      const courseIds = courses.map((c) => c.id);
+      const courseIds = courses.map((c: { id: string }) => c.id);
       const [totalStudents, totalSubmissions] = await Promise.all([
         prisma.enrollment.count({ where: { courseId: { in: courseIds }, status: 'ACTIVE' } }),
         prisma.submission.count({ where: { assignment: { courseId: { in: courseIds } } } }),
