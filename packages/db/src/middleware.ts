@@ -19,7 +19,7 @@ export async function withTenantContext<T>(
   universityId: string,
   fn: () => Promise<T>,
 ): Promise<T> {
-  return prisma.$transaction(async (tx) => {
+  return prisma.$transaction(async (tx: any) => {
     await tx.$executeRawUnsafe(
       `SET LOCAL app.current_university_id = '${universityId.replace(/'/g, "''")}'`,
     );
@@ -34,7 +34,7 @@ export async function withTenantContext<T>(
 export async function withSuperAdminContext<T>(
   fn: () => Promise<T>,
 ): Promise<T> {
-  return prisma.$transaction(async (tx) => {
+  return prisma.$transaction(async (tx: any) => {
     await tx.$executeRawUnsafe(`SET LOCAL role = 'super_admin_role'`);
     return fn();
   });

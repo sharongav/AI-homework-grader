@@ -112,7 +112,7 @@ if (require.main === module) {
   const suiteArg = process.argv.find((a: string) => a.startsWith('--suite='));
   const suite = suiteArg?.split('=')[1];
 
-  runEvalSuite(suite).then((results) => {
+  runEvalSuite(suite).then((results: any) => {
     for (const result of results) {
       console.log(
         `\n${result.suite}: ${result.passed}/${result.total} passed`,
