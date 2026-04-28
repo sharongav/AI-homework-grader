@@ -3,7 +3,7 @@
   "globalDependencies": ["**/.env.*local"],
   "tasks": {
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "db:generate"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "dev": {
@@ -29,7 +29,7 @@
       "cache": false
     },
     "db:generate": {
-      "outputs": ["node_modules/.prisma/**"]
+      "cache": false
     },
     "db:studio": {
       "cache": false,
